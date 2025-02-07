@@ -93,11 +93,17 @@ curl http://127.0.0.1:8000/health
 
 ## 認証
 
+手順:
+
+1. JWT 認証の実装（ユーザーログイン・トークン発行）
+2. データベース（SQLite）のセットアップ
+3. API のルーティング構成の整理
+
 必要なライブラリをインストール。
 
 ```bash
 # インストール
-pip install 'passlib[bcrypt]' 'python-jose[cryptography]' python-multipart
+pip install 'passlib[bcrypt]' 'python-jose[cryptography]' python-multipart SQLAlchemy
 # 依存関係更新
 pip freeze > requirements.txt
 ```
@@ -106,8 +112,18 @@ pip freeze > requirements.txt
 - `python-jose[cryptography]` → JWT のエンコード/デコード
 - `python-multipart` → フォームデータ（ログイン時のリクエストなど）を処理
 
+### 疎通確認
+
+```bash
+curl -X 'POST' 'http://127.0.0.1:8000/register/' \
+     -H 'Content-Type: application/json' \
+     -d '{
+           "username": "testuser",
+           "email": "testuser@example.com",
+           "password": "password123"
+         }'
+```
+
 ## 🔜 次のステップ
 
-1. JWT 認証の実装（ユーザーログイン・トークン発行）
-2. データベース（PostgreSQL）のセットアップ
-3. API のルーティング構成の整理
+SQLite -> PostgreSQLに

@@ -7,3 +7,6 @@ venv/
 .mypy_cache/
 .pytest_cache/
 .env
+
+# SQLite DB
+test.db

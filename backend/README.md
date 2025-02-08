@@ -124,6 +124,32 @@ curl -X 'POST' 'http://127.0.0.1:8000/register/' \
          }'
 ```
 
+### PostgreSQL設定
+
+`docker-compose.yml`を設定したら、次のコマンドで起動。
+
+```bash
+docker compose up -d
+```
+
+#### Docker 内の PostgreSQL にアクセス
+
+以下のコマンドで、PostgreSQLに接続できる。
+
+```bash
+docker compose exec db psql -U admin -d taskboard
+```
+
+### 💡Tips: FastAPI から Docker 内の PostgreSQL へ接続
+
+この環境では、**ホスト側（Docker 外）にインストールされた FastAPI から Docker 内の PostgreSQL に接続** するため、アドレスの指定に注意が必要。
+
+FastAPI の `.env` では、**`127.0.0.1` を指定する**。
+
+```env
+DATABASE_URL=postgresql://<username>:<password>@127.0.0.1:5432/taskboard
+```
+
 ## 🔜 次のステップ
 
 SQLite -> PostgreSQLに

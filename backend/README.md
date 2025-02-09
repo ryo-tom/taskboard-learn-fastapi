@@ -112,7 +112,11 @@ pip freeze > requirements.txt
 - `python-jose[cryptography]` → JWT のエンコード/デコード
 - `python-multipart` → フォームデータ（ログイン時のリクエストなど）を処理
 
-### 疎通確認
+### APIの確認
+
+ユーザー登録（Register API）
+
+以下のコマンドで新しいユーザーを登録する。
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:8000/register/' \
@@ -122,6 +126,49 @@ curl -X 'POST' 'http://127.0.0.1:8000/register/' \
            "email": "testuser@example.com",
            "password": "password123"
          }'
+```
+
+ログイン（Login API）
+
+登録したユーザーの `username` と `password` を使ってログインし、JWTトークンを取得する
+
+```bash
+curl -X 'POST' 'http://127.0.0.1:8000/login/' \
+     -H 'Content-Type: application/json' \
+     -d '{
+           "username": "testuser",
+           "password": "password123"
+         }'
+```
+
+レスポンス例：
+
+```json
+{
+  "access_token": "jwt_token",
+  "token_type": "bearer"
+}
+```
+
+認証付きのAPI呼び出し（GET /users/）
+
+取得したJWTを使い、認証が必要な `/users/` API をコール
+
+```bash
+curl -X 'GET' 'http://127.0.0.1:8000/users/' \
+     -H 'Authorization: Bearer <jwt_token>'
+```
+
+認証に成功すると、登録されている全ユーザーの情報を取得できる。レスポンス例：
+
+```json
+[
+  {
+    "email": "testuser@example.com",
+    "id": 1,
+    "username": "testuser",
+  },
+]
 ```
 
 ### PostgreSQL設定

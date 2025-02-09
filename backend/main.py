@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from auth import hash_password, verify_password, create_access_token
+from auth import hash_password, verify_password, create_access_token, verify_token
 from database import get_db, engine
 from models import User, Base
 from pydantic import BaseModel
@@ -47,3 +47,10 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/users/")
+def get_users(payload: dict = Depends(verify_token), db: Session = Depends(get_db)):
+    print(payload)
+    users = db.query(User).all()
+    return users
